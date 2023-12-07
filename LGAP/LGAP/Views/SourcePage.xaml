@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LGAP.Views.SourcePage"
+             xmlns:viewmodels="clr-namespace:LGAP.ViewModels"
+             x:DataType="viewmodels:SourceViewModel"
+             xmlns:models="clr-namespace:LGAP.Models">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30,0"
+            Spacing="25">
+            <Image
+                Source="dotnet_bot.png"
+                HeightRequest="185"
+                Aspect="AspectFit"
+                SemanticProperties.Description="dot net bot in a race car number eight" />
+
+            <Label
+                Text="Source"
+                Style="{StaticResource Headline}"
+                SemanticProperties.HeadingLevel="Level1" />
+
+            <Button
+                x:Name="SourceButton"
+                Text="Source a new .pls file"
+                Command="{Binding SourceNewPlsCommand}"
+                HorizontalOptions="Fill" />
+
+
+            <CollectionView
+                ItemsSource="{Binding Playlists}"
+                SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type models:Playlist}">
+                        <SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItem
+                                        Text="Delete"
+                                        BackgroundColor="Red"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SourceViewModel}}, Path=DeletePlsCommand}"
+                                        CommandParameter="{Binding .}"/>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <Frame>
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SourceViewModel}}, Path=GoToMediaCommand}"
+                                        CommandParameter="{Binding .}"/>
+                                </Frame.GestureRecognizers>
+                                <Grid
+                                    ColumnDefinitions="*, 3*">
+                                    <Label
+                                        Grid.Column="0"
+                                        FontSize="12"
+                                        HorizontalTextAlignment="Center"
+                                        VerticalTextAlignment="Center"
+                                        Text="{Binding Name, Mode=TwoWay}"/>
+                                    <Label
+                                        Grid.Column="1"
+                                        FontSize="8"
+                                        HeightRequest="32"
+                                        Text="{Binding Path, Mode=TwoWay}"/>
+                                </Grid>
+                            </Frame>
+                        </SwipeView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+
+        </VerticalStackLayout>
+
+
+
+    </ScrollView>
+
+</ContentPage>
