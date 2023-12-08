@@ -22,6 +22,12 @@
                 SemanticProperties.HeadingLevel="Level1" />
 
             <Button
+                x:Name="LoadButton"
+                Text="Load playlists"
+                Command="{Binding LoadPlaylistsCommand}"
+                HorizontalOptions="Fill" />
+            
+            <Button
                 x:Name="SourceButton"
                 Text="Source a new .m3u file"
                 Command="{Binding SourceNewM3uCommand}"

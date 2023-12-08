@@ -3,18 +3,31 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using LGAP.Models;
 using LGAP.Views;
-using Android.Views.Accessibility;
 using System.Text;
+using LGAP.Database;
 
 namespace LGAP.ViewModels;
 public partial class SourceViewModel : ObservableObject
 {
+    private PlaylistDatabase _playlistDatabase;
+
     [ObservableProperty]
     private ObservableCollection<Playlist> playlists;
 
     public SourceViewModel()
     {
+        _playlistDatabase = new PlaylistDatabase();
         playlists = new ObservableCollection<Playlist>();
+    }
+
+    [RelayCommand]
+    private async Task LoadPlaylists()
+    {
+        List<Playlist> playlistsAsListCollection = await _playlistDatabase.GetPlaylists();
+        foreach (Playlist playlist in playlistsAsListCollection)
+        {
+            playlists.Add(playlist);
+        }
     }
 
     [RelayCommand]
@@ -72,14 +85,15 @@ public partial class SourceViewModel : ObservableObject
         var playlist = new Playlist(path, name);
 
         playlists.Add(playlist);
+        await _playlistDatabase.SavePlaylist(playlist);
     }
 
     [RelayCommand]
-    private async Task GoToMedia(Playlist pls)
+    private async Task GoToMedia(Playlist playlist)
     {
         var navigationParameter = new Dictionary<string, object>
         {
-            { "ThePlaylist", pls },
+            { "ThePlaylist", playlist },
         };
 
         await Shell.Current.GoToAsync(
@@ -89,11 +103,12 @@ public partial class SourceViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task DeletePls(Playlist pls)
+    private async Task DeletePls(Playlist playlist)
     {
-        if (playlists.Contains(pls))
+        if (playlists.Contains(playlist))
         {
-            playlists.Remove(pls);
+            playlists.Remove(playlist);
+            _playlistDatabase.DeletePlaylist(playlist);
         }
 
     }
