@@ -9,7 +9,7 @@ namespace LGAP.ViewModels;
 public partial class SourceViewModel : ObservableObject
 {
     [ObservableProperty]
-    ObservableCollection<Playlist> playlists;
+    private ObservableCollection<Playlist> playlists;
 
     public SourceViewModel()
     {
@@ -67,27 +67,7 @@ public partial class SourceViewModel : ObservableObject
             accept: "OK"
         ));
 
-        var textBuilder = new StringBuilder();
-        try
-        {
-            using (var streamReader = new StreamReader(path))
-            {
-                textBuilder.Append(streamReader.ReadToEnd());
-            }
-            
-        }
-        catch (Exception ex)
-        {
-            textBuilder.AppendLine($"File at {path} could not be read");
-            textBuilder.AppendLine(ex.Message);
-        }
-
-        playlists.Add(new Playlist
-        {
-            Name = name,
-            Path = path,
-            Text = textBuilder.ToString()
-        });
+        playlists.Add(new Playlist(path, name));
     }
 
     [RelayCommand]

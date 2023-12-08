@@ -10,8 +10,9 @@
             Text="{Binding Playlist.Name}"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
+        
         <Label
-            Text="{Binding Playlist.Text}"/>
+            Text="{Binding Playlist.RawText}"/>
 
     </VerticalStackLayout>
 </ContentPage>

@@ -22,8 +22,8 @@ namespace LGAP
             builder.Services.AddSingleton<SourcePage>();
             builder.Services.AddSingleton<SourceViewModel>();
 
-            builder.Services.AddSingleton<MediaPage>();
-            builder.Services.AddSingleton<MediaViewModel>();
+            builder.Services.AddTransient<MediaPage>();
+            builder.Services.AddTransient<MediaViewModel>();
 
 #if DEBUG
             builder.Logging.AddDebug();

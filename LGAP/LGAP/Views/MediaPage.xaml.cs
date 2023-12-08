@@ -13,6 +13,9 @@ public partial class MediaPage : ContentPage
 
         mediaElem = new MediaElement();
         mediaElem.IsVisible = false;
+        string testPath = vm.Playlist.TrackFilePaths[0];
+        mediaElem.Source = testPath;
+        mediaElem.Play();
 
         InitializeComponent();
     }

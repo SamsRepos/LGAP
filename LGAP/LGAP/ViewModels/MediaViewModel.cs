@@ -11,4 +11,8 @@ public partial class MediaViewModel : ObservableObject
     [ObservableProperty]
     private Playlist playlist;
 
+    public MediaViewModel() 
+    {
+        
+    }
 }
