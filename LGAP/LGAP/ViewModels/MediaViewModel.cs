@@ -4,11 +4,11 @@ using LGAP.Models;
 namespace LGAP.ViewModels;
 
 
-[ObservableObject]
-[QueryProperty(nameof(Pls), "ThePlaylist")]
-public partial class MediaViewModel
+//[ObservableObject]
+[QueryProperty(nameof(Playlist), "ThePlaylist")]
+public partial class MediaViewModel : ObservableObject
 {
     [ObservableProperty]
-    private Playlist pls;
+    private Playlist playlist;
 
 }

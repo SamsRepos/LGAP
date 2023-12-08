@@ -7,11 +7,11 @@
              Title="MediaPage">
     <VerticalStackLayout>
         <Label 
-            Text="{Binding Pls.Name}"
+            Text="{Binding Playlist.Name}"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
         <Label
-            Text="{Binding Pls.Text}"/>
+            Text="{Binding Playlist.Text}"/>
 
     </VerticalStackLayout>
 </ContentPage>
