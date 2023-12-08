@@ -23,8 +23,8 @@
 
             <Button
                 x:Name="SourceButton"
-                Text="Source a new .pls file"
-                Command="{Binding SourceNewPlsCommand}"
+                Text="Source a new .m3u file"
+                Command="{Binding SourceNewM3uCommand}"
                 HorizontalOptions="Fill" />
 
 

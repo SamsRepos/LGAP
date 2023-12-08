@@ -10,5 +10,8 @@
             Text="{Binding Pls.Name}"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
+        <Label
+            Text="{Binding Pls.Text}"/>
+
     </VerticalStackLayout>
 </ContentPage>
