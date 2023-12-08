@@ -4,13 +4,25 @@
              x:Class="LGAP.Views.MediaPage"
              xmlns:viewmodels="clr-namespace:LGAP.ViewModels"
              x:DataType="viewmodels:MediaViewModel"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              Title="MediaPage">
-    <VerticalStackLayout>
+    <VerticalStackLayout
+        Spacing="10">
         <Label 
             Text="{Binding Playlist.Name}"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
-        
+
+        <toolkit:MediaElement
+            x:Name="mediaElem"
+            IsVisible="True"
+            HeightRequest="300"
+            WidthRequest="400"/>
+            
+
+        <Label
+            Text="{Binding DebugText}"/>
+
         <Label
             Text="{Binding Playlist.RawText}"/>
 

@@ -61,7 +61,7 @@
                                         Grid.Column="1"
                                         FontSize="8"
                                         HeightRequest="32"
-                                        Text="{Binding Path, Mode=TwoWay}"/>
+                                        Text="{Binding M3uFilePath, Mode=TwoWay}"/>
                                 </Grid>
                             </Frame>
                         </SwipeView>

@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using LGAP.Models;
 using LGAP.Views;
+using Android.Views.Accessibility;
 using System.Text;
 
 namespace LGAP.ViewModels;
@@ -19,21 +20,23 @@ public partial class SourceViewModel : ObservableObject
     [RelayCommand]
     private async Task SourceNewM3u()
     {
-        //var m3uFileType = new FilePickerFileType(
-        //    new Dictionary<DevicePlatform, IEnumerable<string>>
-        //    {
-        //        {DevicePlatform.Android, new[]{ "application/x-mpegurl", "audio/mpegurl", "application/vnd.apple.mpegurl" } },  // for .pls files: { "audio/x-scpls" } },
-        //        {DevicePlatform.WinUI, new[]{ ".m3u" } },
-        //        {DevicePlatform.iOS, new[]{ "" } },
-        //        {DevicePlatform.macOS, new[]{ "m3u" } },
-        //    }
-        //);
+        var m3uFileType = new FilePickerFileType(
+            new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                {DevicePlatform.Android, new[]{ "*/*" } },  // "application/x-mpegurl", "audio/mpegurl", "application/vnd.apple.mpegurl" } },  // for .pls files: { "audio/x-scpls" } },
+                {DevicePlatform.WinUI, new[]{ ".m3u" } },
+                {DevicePlatform.iOS, new[]{ "" } },
+                {DevicePlatform.macOS, new[]{ "m3u" } },
+            }
+        );
 
         PickOptions pickOptions = new PickOptions
         {
             PickerTitle = "Pick a .m3u file",
-            //FileTypes = m3uFileType
+            FileTypes = m3uFileType,
         };
+
+        
 
         var fileData = await FilePicker.PickAsync(pickOptions);
 
@@ -54,20 +57,21 @@ public partial class SourceViewModel : ObservableObject
 
         }
 
-        await Shell.Current.DisplayAlert(
-            "You picked...",
-            path,
-            "OK"
-        );
+        StringBuilder msgSB = new StringBuilder();
+        msgSB.AppendLine(path);
+        msgSB.AppendLine("");
+        msgSB.AppendLine("Input a name for new playlist");
 
         string name = (await Shell.Current.DisplayPromptAsync(
             title: "New Playlist",
-            message: "Input a name for new playlist",
-            placeholder: "Playlist name here",
+            message: msgSB.ToString(),
+            placeholder: "Playlist name",
             accept: "OK"
         ));
 
-        playlists.Add(new Playlist(path, name));
+        var playlist = new Playlist(path, name);
+
+        playlists.Add(playlist);
     }
 
     [RelayCommand]

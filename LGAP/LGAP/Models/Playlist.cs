@@ -1,13 +1,17 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Text;
-using static Android.Text.Style.TtsSpan;
+using System.IO;
+using Xamarin.Essentials;
+using Xamarin;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace LGAP.Models;
 
 public partial class Playlist : ObservableObject
 {
-    [ObservableProperty] private string path;
+    [ObservableProperty] private string m3uFilePath;
     [ObservableProperty] private string name;
 
     [ObservableProperty] private string rawText;
@@ -17,8 +21,8 @@ public partial class Playlist : ObservableObject
 
     public Playlist(string path, string name)
     {
-        Path = path;
-        Name = name;
+        M3uFilePath = path;
+        Name        = name;
 
         var textBuilder = new StringBuilder();
         try
@@ -39,8 +43,18 @@ public partial class Playlist : ObservableObject
 
         trackFilePaths = new ObservableCollection<string>();
 
-        var testMediaPath = ".\02. Liberating Prayer.mp3";
+        //string testMediaRelativePath = ".\02. Liberating Prayer.mp3";
+        string testMediaRelativePath = "02. Liberating Prayer.mp3";
 
-        trackFilePaths.Append(testMediaPath);
+        string directoryPath = Path.GetDirectoryName(M3uFilePath);
+
+        //directoryPath = System.IO.Path.GetFullPath(directoryPath);
+
+        string testMediaPath = directoryPath + "/" + testMediaRelativePath;
+        string betterTestMediaPath = Path.Join(directoryPath, testMediaRelativePath);
+        
+
+        trackFilePaths.Add(testMediaPath);
     }
+
 }
