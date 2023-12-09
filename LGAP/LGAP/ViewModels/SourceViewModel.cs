@@ -18,10 +18,12 @@ public partial class SourceViewModel : ObservableObject
     {
         _playlistDatabase = new PlaylistDatabase();
         playlists = new ObservableCollection<Playlist>();
+
+        Task.Run(() => this.LoadPlaylistsAsync()).Wait();
     }
 
     [RelayCommand]
-    private async Task LoadPlaylists()
+    private async Task LoadPlaylistsAsync()
     {
         List<Playlist> playlistsAsListCollection = await _playlistDatabase.GetPlaylists();
         foreach (Playlist playlist in playlistsAsListCollection)
@@ -105,6 +107,8 @@ public partial class SourceViewModel : ObservableObject
     [RelayCommand]
     private async Task DeletePls(Playlist playlist)
     {
+        if(playlists is null) return;
+
         if (playlists.Contains(playlist))
         {
             playlists.Remove(playlist);

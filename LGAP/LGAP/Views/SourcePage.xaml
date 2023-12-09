@@ -21,11 +21,11 @@
                 Style="{StaticResource Headline}"
                 SemanticProperties.HeadingLevel="Level1" />
 
-            <Button
+            <!--<Button
                 x:Name="LoadButton"
                 Text="Load playlists"
                 Command="{Binding LoadPlaylistsCommand}"
-                HorizontalOptions="Fill" />
+                HorizontalOptions="Fill" />-->
             
             <Button
                 x:Name="SourceButton"
