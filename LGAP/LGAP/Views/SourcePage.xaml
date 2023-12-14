@@ -4,20 +4,16 @@
              x:Class="LGAP.Views.SourcePage"
              xmlns:viewmodels="clr-namespace:LGAP.ViewModels"
              x:DataType="viewmodels:SourceViewModel"
-             xmlns:models="clr-namespace:LGAP.Models">
+             xmlns:models="clr-namespace:LGAP.Models"
+             >
 
     <ScrollView>
         <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
-            <Image
-                Source="dotnet_bot.png"
-                HeightRequest="185"
-                Aspect="AspectFit"
-                SemanticProperties.Description="dot net bot in a race car number eight" />
 
             <Label
-                Text="Source"
+                Text="{Binding PageTitle}"
                 Style="{StaticResource Headline}"
                 SemanticProperties.HeadingLevel="Level1" />
 
@@ -32,7 +28,11 @@
                 Text="Source a new .m3u file"
                 Command="{Binding SourceNewM3uCommand}"
                 HorizontalOptions="Fill" />
-
+            <Button
+                x:Name="DeleteAllButton"
+                Text="Delete all playlists"
+                Command="{Binding DeleteAllPlaylistsCommand}"
+                HorizontalOptions="Fill" />
 
             <CollectionView
                 ItemsSource="{Binding Playlists}"
@@ -45,7 +45,7 @@
                                     <SwipeItem
                                         Text="Delete"
                                         BackgroundColor="Red"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SourceViewModel}}, Path=DeletePlsCommand}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SourceViewModel}}, Path=DeletePlaylistCommand}"
                                         CommandParameter="{Binding .}"/>
                                 </SwipeItems>
                             </SwipeView.RightItems>
@@ -56,7 +56,7 @@
                                         CommandParameter="{Binding .}"/>
                                 </Frame.GestureRecognizers>
                                 <Grid
-                                    ColumnDefinitions="*, 3*">
+                                    ColumnDefinitions="*, 3*, *">
                                     <Label
                                         Grid.Column="0"
                                         FontSize="12"
@@ -68,6 +68,12 @@
                                         FontSize="8"
                                         HeightRequest="32"
                                         Text="{Binding M3uFilePath, Mode=TwoWay}"/>
+                                    <Label
+                                        Grid.Column="2"
+                                        FontSize="12"
+                                        HeightRequest="32"
+                                        Text="{Binding IdStr}"/>
+                                        
                                 </Grid>
                             </Frame>
                         </SwipeView>
@@ -83,3 +89,6 @@
     </ScrollView>
 
 </ContentPage>
+
+    
+    

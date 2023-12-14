@@ -20,8 +20,8 @@ public partial class MediaPage : ContentPage
     {
         base.OnAppearing();
 
-        string testPath = _vm.Playlist.trackFilePaths[0];
-        mediaElem.Source = MediaSource.FromFile(testPath);
+        //string testPath = _vm.Playlist.trackFilePaths[0];
+        //mediaElem.Source = MediaSource.FromFile(testPath);
 
         //try
         //{

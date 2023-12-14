@@ -14,18 +14,22 @@ public partial class SourceViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<Playlist> playlists;
 
+    [ObservableProperty]
+    private string pageTitle;
+
     public SourceViewModel()
     {
-        _playlistDatabase = new PlaylistDatabase();
-        playlists = new ObservableCollection<Playlist>();
-
-        Task.Run(() => this.LoadPlaylistsAsync()).Wait();
+        PageTitle = "Loading playlists...";
+        Task.Run(() => LoadAllPlaylistsAsync()).Wait();
+        PageTitle = "Playlists";
     }
 
     [RelayCommand]
-    private async Task LoadPlaylistsAsync()
+    private async Task LoadAllPlaylistsAsync()
     {
-        List<Playlist> playlistsAsListCollection = await _playlistDatabase.GetPlaylists();
+        _playlistDatabase = new PlaylistDatabase();
+        playlists = new ObservableCollection<Playlist>();
+        List<Playlist> playlistsAsListCollection = await _playlistDatabase.GetAllPlaylistsAsync();
         foreach (Playlist playlist in playlistsAsListCollection)
         {
             playlists.Add(playlist);
@@ -52,7 +56,6 @@ public partial class SourceViewModel : ObservableObject
         };
 
         
-
         var fileData = await FilePicker.PickAsync(pickOptions);
 
         if (fileData == null) return;
@@ -87,7 +90,14 @@ public partial class SourceViewModel : ObservableObject
         var playlist = new Playlist(path, name);
 
         playlists.Add(playlist);
-        await _playlistDatabase.SavePlaylist(playlist);
+        await _playlistDatabase.SavePlaylistAsync(playlist);
+    }
+
+    [RelayCommand]
+    private async Task DeleteAllPlaylistsAsync()
+    {
+        playlists.Clear();
+        await _playlistDatabase.DeleteAllPlaylistsAsync();
     }
 
     [RelayCommand]
@@ -105,15 +115,16 @@ public partial class SourceViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task DeletePls(Playlist playlist)
+    private async Task DeletePlaylistAsync(Playlist playlist)
     {
         if(playlists is null) return;
 
         if (playlists.Contains(playlist))
         {
             playlists.Remove(playlist);
-            _playlistDatabase.DeletePlaylist(playlist);
+            _playlistDatabase.DeletePlaylistAsync(playlist);
         }
 
     }
+
 }

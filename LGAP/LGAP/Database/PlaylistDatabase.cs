@@ -1,10 +1,5 @@
 ﻿using LGAP.Models;
 using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LGAP.Database;
 
@@ -12,7 +7,7 @@ public class PlaylistDatabase
 {
     private SQLiteAsyncConnection _database;
 
-    private async Task Init()
+    private async Task InitAsync()
     {
         if(_database is not null)
         {
@@ -27,10 +22,11 @@ public class PlaylistDatabase
         await _database.CreateTableAsync<Playlist>();
     }
 
-    public async Task<int> SavePlaylist(Playlist playlist)
+    public async Task<int> SavePlaylistAsync(Playlist playlist)
     {
-        await Init();
-        if(playlist.Id != 0)
+        await InitAsync();
+
+        if(playlist.Id != default(int))
         {
             return await _database.UpdateAsync(playlist);
         }
@@ -40,19 +36,34 @@ public class PlaylistDatabase
         }
     }
 
-    public async Task<List<Playlist>> GetPlaylists()
+    public async Task<Playlist> GetPlaylistAsync(int id)
     {
-        await Init();
-        return await _database.Table<Playlist>().ToListAsync();
+        await InitAsync();
+        return await _database.Table<Playlist>().Where(i => i.Id == id).FirstOrDefaultAsync();
     }
 
-    public async Task DeletePlaylist(Playlist playlist)
+    public async Task<List<Playlist>> GetAllPlaylistsAsync()
     {
-        await Init();
-        if(playlist.Id != 0)
+        await InitAsync();
+        
+        var res = await _database.Table<Playlist>().ToListAsync();
+        _database.UpdateAllAsync(res, true);
+        return res;
+    }
+
+    public async Task DeletePlaylistAsync(Playlist playlist)
+    {
+        await InitAsync();
+        if(playlist.Id != default(int))
         {
             await _database.DeleteAsync(playlist);
         }
+    }
+
+    public async Task DeleteAllPlaylistsAsync()
+    {
+        await InitAsync();
+        await _database.DeleteAllAsync<Playlist>();
     }
 }
 
