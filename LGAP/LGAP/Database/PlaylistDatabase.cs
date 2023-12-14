@@ -45,10 +45,8 @@ public class PlaylistDatabase
     public async Task<List<Playlist>> GetAllPlaylistsAsync()
     {
         await InitAsync();
-        
-        var res = await _database.Table<Playlist>().ToListAsync();
-        _database.UpdateAllAsync(res, true);
-        return res;
+
+        return await _database.Table<Playlist>().ToListAsync();
     }
 
     public async Task DeletePlaylistAsync(Playlist playlist)

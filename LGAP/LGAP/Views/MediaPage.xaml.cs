@@ -19,13 +19,20 @@ public partial class MediaPage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-
-        //string testPath = _vm.Playlist.trackFilePaths[0];
-        //mediaElem.Source = MediaSource.FromFile(testPath);
-
+        
+        try
+        {
+            string testPath = _vm.Playlist.trackFilePaths[0];
+            mediaElem.Source = MediaSource.FromFile(testPath);
+        }
+        catch (Exception ex)
+        {
+            _vm.DebugText = ex.Message;
+        }
+        
         //try
         //{
-        //    string testPath = _vm.Playlist.TrackFilePaths[0];
+        //    string testPath = _vm.Playlist.trackFilePaths[0];
         //    mediaElem = new MediaElement
         //    {
         //        IsVisible = false,
@@ -33,7 +40,7 @@ public partial class MediaPage : ContentPage
         //        Source = MediaSource.FromFile(testPath)
         //    };
         //}
-        //catch(Exception e)
+        //catch (Exception e)
         //{
         //    _vm.DebugText = e.Message;
         //}
