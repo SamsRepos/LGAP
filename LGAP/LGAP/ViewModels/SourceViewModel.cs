@@ -89,8 +89,8 @@ public partial class SourceViewModel : ObservableObject
 
         var playlist = new Playlist(path, name);
 
-        playlists.Add(playlist);
         await _playlistDatabase.SavePlaylistAsync(playlist);
+        playlists.Add(playlist);
     }
 
     [RelayCommand]

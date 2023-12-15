@@ -19,7 +19,9 @@ public partial class MediaPage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        
+
+        //_vm.DebugText = _vm.Playlist.Id.ToString();
+
         try
         {
             string testPath = _vm.Playlist.trackFilePaths[0];
@@ -29,7 +31,7 @@ public partial class MediaPage : ContentPage
         {
             _vm.DebugText = ex.Message;
         }
-        
+
         //try
         //{
         //    string testPath = _vm.Playlist.trackFilePaths[0];

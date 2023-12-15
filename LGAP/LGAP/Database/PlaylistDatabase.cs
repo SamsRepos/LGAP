@@ -14,8 +14,10 @@ public class PlaylistDatabase
             return;
         }
 
+        var dbPath = Constants.PlaylistDatabasePath;
+
         _database = new SQLiteAsyncConnection(
-            Constants.PlaylistDatabasePath,
+            dbPath,
             Constants.Flags
         );
 

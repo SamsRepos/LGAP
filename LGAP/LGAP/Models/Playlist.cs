@@ -2,9 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Text;
 using SQLiteNetExtensions.Attributes;
-using System.ComponentModel.DataAnnotations;
-using CommunityToolkit.Mvvm.Input;
 using SQLite;
+using Newtonsoft.Json;
 
 namespace LGAP.Models;
 
@@ -25,7 +24,11 @@ public partial class Playlist : ObservableObject
 
     [TextBlob(nameof(trackFilePathsBlobbed))]
     public ObservableCollection<string> trackFilePaths { get; set; }
-    public string trackFilePathsBlobbed { get; set; }
+    public string trackFilePathsBlobbed 
+    {
+        get => JsonConvert.SerializeObject(trackFilePaths);
+        set => trackFilePaths = JsonConvert.DeserializeObject<ObservableCollection<string>>(value);
+    }
 
     //public paramterless constructor required for SQL
     public Playlist()
@@ -43,7 +46,7 @@ public partial class Playlist : ObservableObject
         {
             using (var streamReader = new StreamReader(path))
             {
-                textBuilder.Append(streamReader.ReadToEnd());
+                textBuilder.AppendLine(streamReader.ReadToEnd());
             }
 
         }
@@ -68,7 +71,7 @@ public partial class Playlist : ObservableObject
         string betterTestMediaPath = Path.Join(directoryPath, testMediaRelativePath);
         string evenBetterTestMediaPath = Path.Combine(directoryPath, testMediaRelativePath);
 
-        trackFilePaths.Add(testMediaPath);
+        trackFilePaths.Add("C:\\Users\\samue\\Desktop\\LGAP_testing\\TestPlaylistDir\\02.Liberating Prayer.mp3");
     }
 
 }
