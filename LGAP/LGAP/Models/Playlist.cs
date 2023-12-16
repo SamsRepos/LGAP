@@ -4,6 +4,7 @@ using System.Text;
 using SQLiteNetExtensions.Attributes;
 using SQLite;
 using Newtonsoft.Json;
+using System.Text.RegularExpressions;
 
 namespace LGAP.Models;
 
@@ -33,7 +34,7 @@ public partial class Playlist : ObservableObject
     //public paramterless constructor required for SQL
     public Playlist()
     {
-        trackFilePaths = new ObservableCollection<string>();
+        
     }
 
     public Playlist(string path, string name)
@@ -54,32 +55,36 @@ public partial class Playlist : ObservableObject
         {
             textBuilder.AppendLine($"File at {path} could not be read");
             textBuilder.AppendLine(ex.Message);
+            RawText = textBuilder.ToString();
+            return;
         }
 
         RawText = textBuilder.ToString();
 
         trackFilePaths = new ObservableCollection<string>();
 
-        string testMediaRelativePath = ".\\02. Liberating Prayer.mp3"; // in m3u file like: ".\02. Liberating Prayer.mp3", need \\ as escape char for \
+        string m3uDirectoryPath = Path.GetDirectoryName(M3uFilePath);
+
+        char[] endCharsToTrim = { '/', '\\' };
+        m3uDirectoryPath = m3uDirectoryPath.TrimEnd(endCharsToTrim);
+
+        string pattern = @"(\r\n[^#\r\n]+\.mp3)";
+        foreach (Match m in Regex.Matches(RawText, pattern))
+        {
+            string mediaRelativePath = m.Groups[1].Value;
+            
+            char[] startCharsToTrim = { '.', '\r', '\n',  };
+            mediaRelativePath = mediaRelativePath.TrimStart(startCharsToTrim);
 
 #if ANDROID
-        testMediaRelativePath = "./02. Liberating Prayer.mp3";
+            mediaRelativePath = mediaRelativePath.Replace('\\', '/');
 #endif
 
-        string directoryPath = Path.GetDirectoryName(M3uFilePath);
+            string mediaAbsolutePath = Path.Join(m3uDirectoryPath, mediaRelativePath);
 
-        char[] endChars = { '/' };
-        directoryPath = directoryPath.TrimEnd(endChars);
-
-        char[] startChars = { '.' };
-        testMediaRelativePath = testMediaRelativePath.TrimStart(startChars);
-
-        //directoryPath = System.IO.Path.GetFullPath(directoryPath);
-
-        string testMediaPath = Path.Join(directoryPath, testMediaRelativePath);
-
-        //trackFilePaths.Add("C:\\Users\\samue\\Desktop\\LGAPtesting\\TestPlaylistDir\\02. Liberating Prayer.mp3");
-        trackFilePaths.Add(testMediaPath);
+            trackFilePaths.Add(mediaAbsolutePath);
+        }
     }
+
 
 }
