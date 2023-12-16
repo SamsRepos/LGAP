@@ -34,7 +34,30 @@
                 Command="{Binding DeleteAllPlaylistsCommand}"
                 HorizontalOptions="Fill" />
 
-            <CollectionView
+
+            <Grid
+                ColumnDefinitions="2*, 3*, *">
+                <Label
+                    Grid.Column="0"
+                    FontSize="13"
+                    HorizontalTextAlignment="Start"
+                    VerticalTextAlignment="Center"
+                    Text="Name"/>
+                <Label
+                    Grid.Column="1"
+                    FontSize="13"
+                    HorizontalTextAlignment="Start"
+                    VerticalTextAlignment="Center"
+                    Text="Path"/>
+                <Label
+                    Grid.Column="2"
+                    FontSize="13"
+                    HorizontalTextAlignment="Center"
+                    VerticalTextAlignment="Center"
+                    Text="ID"/>
+            </Grid>
+            
+                <CollectionView
                 ItemsSource="{Binding Playlists}"
                 SelectionMode="None">
                 <CollectionView.ItemTemplate>
@@ -56,22 +79,25 @@
                                         CommandParameter="{Binding .}"/>
                                 </Frame.GestureRecognizers>
                                 <Grid
-                                    ColumnDefinitions="*, 3*, *">
+                                    ColumnDefinitions="2*, 3*, *">
                                     <Label
                                         Grid.Column="0"
                                         FontSize="12"
-                                        HorizontalTextAlignment="Center"
+                                        HorizontalTextAlignment="Start"
                                         VerticalTextAlignment="Center"
                                         Text="{Binding Name, Mode=TwoWay}"/>
                                     <Label
                                         Grid.Column="1"
                                         FontSize="8"
                                         HeightRequest="32"
+                                        HorizontalTextAlignment="Start"
+                                        VerticalTextAlignment="Center"
                                         Text="{Binding M3uFilePath, Mode=TwoWay}"/>
                                     <Label
                                         Grid.Column="2"
                                         FontSize="12"
-                                        HeightRequest="32"
+                                        HorizontalTextAlignment="Center"
+                                        VerticalTextAlignment="Center"
                                         Text="{Binding IdStr}"/>
                                         
                                 </Grid>

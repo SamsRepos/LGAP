@@ -5,6 +5,9 @@ using LGAP.Models;
 using LGAP.Views;
 using System.Text;
 using LGAP.Database;
+using Microsoft.Maui.Controls.PlatformConfiguration;
+using Microsoft.Maui;
+using static SQLite.SQLite3;
 
 namespace LGAP.ViewModels;
 public partial class SourceViewModel : ObservableObject
@@ -53,12 +56,46 @@ public partial class SourceViewModel : ObservableObject
         {
             PickerTitle = "Pick a .m3u file",
             FileTypes = m3uFileType,
+            
         };
 
-        
         var fileData = await FilePicker.PickAsync(pickOptions);
 
         if (fileData == null) return;
+
+#if true //ANDROID
+        //var docsDirectory = Android.App.Application.Context.GetExternalFilesDir(fileData.FullPath);
+
+        //if(Android.OS.Environment.IsExternalStorageManager)
+        //{
+        //    await Shell.Current.DisplayAlert("Android VERSION  R OR ABOVE", "HAVE MANAGE_EXTERNAL_STORAGE GRANTED!", "ОК");
+        //}
+        //else
+        //{
+        //    await Shell.Current.DisplayAlert("Android VERSION  R OR ABOVE", "NO HAVE MANAGE_EXTERNAL_STORAGE GRANTED!", "ОК");
+        //    string package = AppInfo.Current.PackageName;
+        //    var uri = Android.Net.Uri.Parse($"package:{package}");
+        //    Platform.CurrentActivity.StartActivityForResult(new Intent
+        //        (Android.Provider.Settings.ActionManageAppAllFilesAccessPermission, uri), 10);
+        //}
+
+        //Intent intent = Intent;
+        //var uri = intent.Data;
+        //string uriPath = uri.Path;
+        //Java.IO.File file = new Java.IO.File(uriPath);
+        //string fullFilePath = file.AbsolutePath;
+        //string f = file.Path;
+        //Launcher.OpenAsync(new OpenFileRequest
+        //{
+        //    File = new ReadOnlyFile(fullFilePath)
+        //});
+
+        //var docsDirectory = Android.App.Application.Context.GetExternalFilesDir(Android.OS.Environment.DirectoryDocuments);
+
+        //File.WriteAllText($"{docsDirectory.AbsoluteFile.Path}/atextfile.txt", "contents are here");
+
+
+#endif
 
         string path     = fileData.FullPath;
         string fileName = fileData.FileName;

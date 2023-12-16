@@ -60,18 +60,22 @@ public partial class Playlist : ObservableObject
 
         trackFilePaths = new ObservableCollection<string>();
 
-        string testMediaRelativePath = ".\02. Liberating Prayer.mp3";
-        //string testMediaRelativePath = "02. Liberating Prayer.mp3";
-
+        string testMediaRelativePath = ".\\02. Liberating Prayer.mp3"; // in m3u file like: ".\02. Liberating Prayer.mp3", need \\ as escape char for \
+        
         string directoryPath = Path.GetDirectoryName(M3uFilePath);
+
+        char[] endChars = { '/' };
+        directoryPath = directoryPath.TrimEnd(endChars);
+
+        char[] startChars = { '.' };
+        testMediaRelativePath = testMediaRelativePath.TrimStart(startChars);
 
         //directoryPath = System.IO.Path.GetFullPath(directoryPath);
 
-        string testMediaPath = directoryPath + "/" + testMediaRelativePath;
-        string betterTestMediaPath = Path.Join(directoryPath, testMediaRelativePath);
-        string evenBetterTestMediaPath = Path.Combine(directoryPath, testMediaRelativePath);
+        string testMediaPath = Path.Join(directoryPath, testMediaRelativePath);
 
-        trackFilePaths.Add("C:\\Users\\samue\\Desktop\\LGAP_testing\\TestPlaylistDir\\02.Liberating Prayer.mp3");
+        //trackFilePaths.Add("C:\\Users\\samue\\Desktop\\LGAPtesting\\TestPlaylistDir\\02. Liberating Prayer.mp3");
+        trackFilePaths.Add(testMediaPath);
     }
 
 }
