@@ -61,7 +61,11 @@ public partial class Playlist : ObservableObject
         trackFilePaths = new ObservableCollection<string>();
 
         string testMediaRelativePath = ".\\02. Liberating Prayer.mp3"; // in m3u file like: ".\02. Liberating Prayer.mp3", need \\ as escape char for \
-        
+
+#if ANDROID
+        testMediaRelativePath = "./02. Liberating Prayer.mp3";
+#endif
+
         string directoryPath = Path.GetDirectoryName(M3uFilePath);
 
         char[] endChars = { '/' };

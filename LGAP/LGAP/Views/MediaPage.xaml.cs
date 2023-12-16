@@ -53,10 +53,8 @@ public partial class MediaPage : ContentPage
             );
 
             return;
-
         }
 
-        
         _vm.DebugText = path;
         mediaElem.Source = path;
     }
@@ -66,7 +64,7 @@ public partial class MediaPage : ContentPage
     {
         base.OnAppearing();
 
-        _vm.DebugText = _vm.Playlist.Id.ToString();
+        //_vm.DebugText = _vm.Playlist.Id.ToString();
 
         try
         {
@@ -75,6 +73,7 @@ public partial class MediaPage : ContentPage
             string testPath = _vm.Playlist.trackFilePaths[0];
             var mediaSrc = MediaSource.FromFile(testPath);
             mediaElem.Source = mediaSrc;
+            _vm.DebugText = testPath;
         }
         catch (Exception ex)
         {
