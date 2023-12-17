@@ -15,15 +15,29 @@
 
         <toolkit:MediaElement
             x:Name="mediaElem"
-            IsVisible="True"
+            IsVisible="False"
             HeightRequest="300"
-            WidthRequest="400"/>
-            
+            WidthRequest="400"
+            PositionChanged="UpdateTrackPositionText" />
+
+        <Button
+            Text="{Binding PlayPauseButTxt}"
+            Command="{Binding PlayPauseCommand}"/>
 
         <Label
-            Text="{Binding DebugText}"/>
+            FontSize="Large"
+            Text="{Binding CurrentTrackPosition}"/>
 
         <Label
+            FontSize="Large"
+            Text="{Binding CurrentTrackText}"/>
+
+        <Label
+            FontSize="Medium"
+            Text="{Binding PlaylistInfoText}"/>
+        
+        <Label
+            FontSize="Small"
             Text="{Binding Playlist.RawText}"/>
 
     </VerticalStackLayout>

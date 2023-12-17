@@ -42,7 +42,7 @@ public partial class SourceViewModel : ObservableObject
     [RelayCommand]
     private async Task SourceNewM3u()
     {
-        // TODO: need to find a way to get the actual file path in Android (Android creates a copy in app cache and return that)
+        // TODO: need to find a way to get the actual file path in Android (Android creates a copy in app cache and returns that)
 
         var m3uFileType = new FilePickerFileType(
             new Dictionary<DevicePlatform, IEnumerable<string>>
