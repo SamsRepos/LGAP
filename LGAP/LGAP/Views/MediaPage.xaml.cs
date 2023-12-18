@@ -1,4 +1,5 @@
-﻿using LGAP.ViewModels;
+﻿using CommunityToolkit.Maui.Views;
+using LGAP.ViewModels;
 
 namespace LGAP.Views;
 
@@ -27,5 +28,10 @@ public partial class MediaPage : ContentPage
     private void UpdateTrackPositionText(object s, EventArgs e)
     {
         _vm.UpdateTrackPositionText();
+    }
+
+    private void MediaEnded(object s, EventArgs e)
+    {
+        _vm.MediaEnded();
     }
 }

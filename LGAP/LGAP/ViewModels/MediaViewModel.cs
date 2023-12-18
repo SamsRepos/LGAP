@@ -16,7 +16,7 @@ public partial class MediaViewModel : ObservableObject
     private Playlist playlist;
 
     [ObservableProperty]
-    private string currentTrackPosition;
+    private string trackPositionText;
 
     [ObservableProperty]
     private string currentTrackText;
@@ -28,43 +28,41 @@ public partial class MediaViewModel : ObservableObject
     private string playPauseButTxt;
 
     private MediaElement _mediaElem;
+    private int _currentTrackIndex;
+    
     public void Init(ref MediaElement mElem)
     {
+        if (mElem is null)
+        {
+            CurrentTrackText = "Error: MediaElement to MediaViewModel is null";
+            return;
+        }
+
         _mediaElem = mElem;
 
-        try
+        if(Playlist.trackFilePaths.Count == 0)
         {
-            int currentIndex = 0;
-
-            string firstAudioPath = Playlist.trackFilePaths[currentIndex];
-            var mediaSrc = MediaSource.FromFile(firstAudioPath);
-            _mediaElem.Source = mediaSrc;
-            UpdateCurrentTrackText(firstAudioPath, currentIndex);
-
-            StringBuilder playlistInfoSB = new StringBuilder();
-            foreach(var path in Playlist.trackFilePaths)
-            {
-                playlistInfoSB.AppendLine(path);
-            }
-            PlaylistInfoText = playlistInfoSB.ToString();
-        }
-        catch (Exception ex)
-        {
-            CurrentTrackText = ex.Message;
+            CurrentTrackText = "Error: Playlist contains zero tracks";
+            return;
         }
 
         PlayPauseButTxt = "Play";
+
+        StringBuilder playlistInfoSb = new StringBuilder();
+        foreach (var path in Playlist.trackFilePaths)
+        {
+            playlistInfoSb.AppendLine(path);
+        }
+        PlaylistInfoText = playlistInfoSb.ToString();
+
+        _currentTrackIndex = 0;
+        LoadNextTrack();
     }
 
     private void UpdateCurrentTrackText(string trackFilePath, int currentIndex)
     {
         StringBuilder sb = new StringBuilder();
         sb.AppendLine($"Currently playing: {currentIndex + 1} of {playlist.trackFilePaths.Count()}");
-
-        string currentTrackPosition = _mediaElem.Position.ToString();
-        string fullTrackDuration    = _mediaElem.Duration.ToString();
-
-        sb.AppendLine($"{currentTrackPosition} of {fullTrackDuration}");
 
         sb.AppendLine(trackFilePath);
         
@@ -79,7 +77,7 @@ public partial class MediaViewModel : ObservableObject
 
         sb.AppendLine($"{currentTrackPosition} of {fullTrackDuration}");
 
-        CurrentTrackText = sb.ToString();
+        TrackPositionText = sb.ToString();
     }
 
     [RelayCommand]
@@ -97,4 +95,35 @@ public partial class MediaViewModel : ObservableObject
         }
     }
 
+    public void MediaEnded()
+    {
+        _currentTrackIndex++;
+
+        if(_currentTrackIndex >= Playlist.trackFilePaths.Count) 
+        {
+            CurrentTrackText = "Media ended";
+            return;
+        }
+
+        LoadNextTrack();
+
+    }
+
+    private void LoadNextTrack()
+    {
+        try
+        {
+            string audioPath   = Playlist.trackFilePaths[_currentTrackIndex];
+            var mediaSrc       = MediaSource.FromFile(audioPath);
+
+            //_mediaElem.Source  = null; // resetting/unloading the MediaElement
+            _mediaElem.Source  = mediaSrc;
+            //_mediaElem.Play();
+            UpdateCurrentTrackText(audioPath, _currentTrackIndex);
+        }
+        catch (Exception ex)
+        {
+            CurrentTrackText = ex.Message;
+        }
+    }
 }

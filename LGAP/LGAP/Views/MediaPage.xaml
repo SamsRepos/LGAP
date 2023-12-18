@@ -15,10 +15,12 @@
 
         <toolkit:MediaElement
             x:Name="mediaElem"
-            IsVisible="False"
+            IsVisible="True"
             HeightRequest="300"
             WidthRequest="400"
-            PositionChanged="UpdateTrackPositionText" />
+            PositionChanged="UpdateTrackPositionText"
+            MediaEnded="MediaEnded" 
+            ShouldAutoPlay="True" />
 
         <Button
             Text="{Binding PlayPauseButTxt}"
@@ -26,11 +28,11 @@
 
         <Label
             FontSize="Large"
-            Text="{Binding CurrentTrackPosition}"/>
-
+            Text="{Binding CurrentTrackText}"/>
+        
         <Label
             FontSize="Large"
-            Text="{Binding CurrentTrackText}"/>
+            Text="{Binding TrackPositionText}"/>
 
         <Label
             FontSize="Medium"
