@@ -5,22 +5,38 @@
              xmlns:viewmodels="clr-namespace:LGAP.ViewModels"
              x:DataType="viewmodels:MediaViewModel"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:models="clr-namespace:LGAP.Models"
              Title="MediaPage">
+    <ScrollView>
     <VerticalStackLayout
         Spacing="10">
-        <Label 
+        <Label
             Text="{Binding Playlist.Name}"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
 
-        <toolkit:MediaElement
-            x:Name="mediaElem"
-            IsVisible="True"
-            HeightRequest="300"
-            WidthRequest="400"
-            PositionChanged="UpdateTrackPositionText"
-            MediaEnded="MediaEnded" 
-            ShouldAutoPlay="True" />
+        <CollectionView
+            ItemsSource="{Binding MediaTracks}"
+            SelectionMode="None"
+            x:Name="mediaElemsView">
+            <CollectionView.ItemTemplate>
+                <DataTemplate 
+                    x:DataType="{x:Type models:MediaTrack}">
+                    <Frame
+                        x:Name="mediaElemsFrame">
+                        <toolkit:MediaElement
+                            x:Name="{Binding Name}"
+                            IsVisible="True"
+                            HeightRequest="100"
+                            WidthRequest="400"
+                            ShouldAutoPlay="{Binding ShouldAutoPlay, Mode=TwoWay}"
+                            Source="{Binding Path}"
+                            MediaEnded="MediaEnded"
+                            PositionChanged="UpdateTrackPositionText"/>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
         <Button
             Text="{Binding PlayPauseButTxt}"
@@ -43,4 +59,5 @@
             Text="{Binding Playlist.RawText}"/>
 
     </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

@@ -18,11 +18,8 @@ public partial class MediaPage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-
-        if(mediaElem is not null)
-        {
-            _vm.Init(ref mediaElem);
-        }
+        _vm.Init();
+        
     }
 
     private void UpdateTrackPositionText(object s, EventArgs e)
@@ -32,6 +29,7 @@ public partial class MediaPage : ContentPage
 
     private void MediaEnded(object s, EventArgs e)
     {
-        _vm.MediaEnded();
+        _vm.MediaEnded(mediaElemsFrame);
+        
     }
 }

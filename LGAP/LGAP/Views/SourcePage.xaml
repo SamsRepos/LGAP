@@ -58,8 +58,8 @@
             </Grid>
             
                 <CollectionView
-                ItemsSource="{Binding Playlists}"
-                SelectionMode="None">
+                    ItemsSource="{Binding Playlists}"
+                    SelectionMode="None">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="{x:Type models:Playlist}">
                         <SwipeView>

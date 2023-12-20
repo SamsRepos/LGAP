@@ -1,8 +1,8 @@
-﻿using CommunityToolkit.Maui.Core.Primitives;
-using CommunityToolkit.Maui.Views;
+﻿using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LGAP.Models;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace LGAP.ViewModels;
@@ -16,29 +16,17 @@ public partial class MediaViewModel : ObservableObject
     private Playlist playlist;
 
     [ObservableProperty]
-    private string trackPositionText;
+    private ObservableCollection<MediaTrack> mediaTracks;
 
-    [ObservableProperty]
-    private string currentTrackText;
-
-    [ObservableProperty]
-    private string playlistInfoText;
-
-    [ObservableProperty]
-    private string playPauseButTxt;
-
-    private MediaElement _mediaElem;
     private int _currentTrackIndex;
-    
-    public void Init(ref MediaElement mElem)
-    {
-        if (mElem is null)
-        {
-            CurrentTrackText = "Error: MediaElement to MediaViewModel is null";
-            return;
-        }
 
-        _mediaElem = mElem;
+    [ObservableProperty] private string trackPositionText;
+    [ObservableProperty] private string currentTrackText;
+    [ObservableProperty] private string playlistInfoText;
+    [ObservableProperty] private string playPauseButTxt;
+
+    public void Init()
+    {
 
         if(Playlist.trackFilePaths.Count == 0)
         {
@@ -48,15 +36,19 @@ public partial class MediaViewModel : ObservableObject
 
         PlayPauseButTxt = "Play";
 
+        MediaTracks = new ObservableCollection<MediaTrack>();
+
         StringBuilder playlistInfoSb = new StringBuilder();
-        foreach (var path in Playlist.trackFilePaths)
+        for(int index = 0; index < Playlist.trackFilePaths.Count(); ++index)
         {
+            var path = Playlist.trackFilePaths[index];
+
+            MediaTracks.Add(new MediaTrack(path, index));
             playlistInfoSb.AppendLine(path);
         }
         PlaylistInfoText = playlistInfoSb.ToString();
 
         _currentTrackIndex = 0;
-        LoadNextTrack();
     }
 
     private void UpdateCurrentTrackText(string trackFilePath, int currentIndex)
@@ -71,31 +63,33 @@ public partial class MediaViewModel : ObservableObject
 
     public void UpdateTrackPositionText()
     {
-        StringBuilder sb = new StringBuilder();
-        string currentTrackPosition = _mediaElem.Position.ToString();
-        string fullTrackDuration = _mediaElem.Duration.ToString();
+        //if (_mediaElem is null) return;
 
-        sb.AppendLine($"{currentTrackPosition} of {fullTrackDuration}");
+        //StringBuilder sb = new StringBuilder();
+        //string currentTrackPosition = _mediaElem.Position.ToString();
+        //string fullTrackDuration = _mediaElem.Duration.ToString();
 
-        TrackPositionText = sb.ToString();
+        //sb.AppendLine($"{currentTrackPosition} of {fullTrackDuration}");
+
+        //TrackPositionText = sb.ToString();
     }
 
     [RelayCommand]
     private void PlayPause()
     {
-        if (_mediaElem.CurrentState == MediaElementState.Paused /*|| _mediaElem.CurrentState == MediaElementState.Stopped*/)
-        {
-            _mediaElem.Play();
-            PlayPauseButTxt = "Pause";
-        }
-        else if (_mediaElem.CurrentState == MediaElementState.Playing)
-        {
-            _mediaElem.Pause();
-            PlayPauseButTxt = "Play";
-        }
+        //if (_mediaElem.CurrentState == MediaElementState.Paused /*|| _mediaElem.CurrentState == MediaElementState.Stopped*/)
+        //{
+        //    _mediaElem.Play();
+        //    PlayPauseButTxt = "Pause";
+        //}
+        //else if (_mediaElem.CurrentState == MediaElementState.Playing)
+        //{
+        //    _mediaElem.Pause();
+        //    PlayPauseButTxt = "Play";
+        //}
     }
 
-    public void MediaEnded()
+    public void MediaEnded(Frame mediaElemsFrame)
     {
         _currentTrackIndex++;
 
@@ -105,25 +99,13 @@ public partial class MediaViewModel : ObservableObject
             return;
         }
 
-        LoadNextTrack();
+        var nextTrack = MediaTracks[_currentTrackIndex];
 
+        string nextMediaElemName = nextTrack.Name;
+
+        MediaElement mediaElem = (MediaElement)mediaElemsFrame.FindByName(nextMediaElemName);
+
+        mediaElem.Play();
     }
 
-    private void LoadNextTrack()
-    {
-        try
-        {
-            string audioPath   = Playlist.trackFilePaths[_currentTrackIndex];
-            var mediaSrc       = MediaSource.FromFile(audioPath);
-
-            //_mediaElem.Source  = null; // resetting/unloading the MediaElement
-            _mediaElem.Source  = mediaSrc;
-            //_mediaElem.Play();
-            UpdateCurrentTrackText(audioPath, _currentTrackIndex);
-        }
-        catch (Exception ex)
-        {
-            CurrentTrackText = ex.Message;
-        }
-    }
 }
