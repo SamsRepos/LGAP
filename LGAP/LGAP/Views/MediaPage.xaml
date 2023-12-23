@@ -15,28 +15,32 @@
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
 
-        <CollectionView
+            <CollectionView
+                ItemsSource="{Binding MediaTracks}"
+                SelectionMode="None"
+                x:Name="mediaCollectionView"/>
+
+            <!--<CollectionView
             ItemsSource="{Binding MediaTracks}"
             SelectionMode="None"
-            x:Name="mediaElemsView">
+            x:Name="mediaCollectionView">
             <CollectionView.ItemTemplate>
                 <DataTemplate 
                     x:DataType="{x:Type models:MediaTrack}">
-                    <Frame
-                        x:Name="mediaElemsFrame">
-                        <toolkit:MediaElement
-                            x:Name="{Binding Name}"
-                            IsVisible="True"
-                            HeightRequest="100"
-                            WidthRequest="400"
-                            ShouldAutoPlay="{Binding ShouldAutoPlay, Mode=TwoWay}"
-                            Source="{Binding Path}"
-                            MediaEnded="MediaEnded"
-                            PositionChanged="UpdateTrackPositionText"/>
-                    </Frame>
+                        
+                    <toolkit:MediaElement
+                        x:Name="{Binding Name}"
+                        IsVisible="True"
+                        HeightRequest="100"
+                        WidthRequest="400"
+                        ShouldAutoPlay="{Binding ShouldAutoPlay, Mode=TwoWay}"
+                        Source="{Binding Path}"
+                        MediaEnded="MediaEnded"
+                        PositionChanged="UpdateTrackPositionText"/>
+                        
                 </DataTemplate>
             </CollectionView.ItemTemplate>
-        </CollectionView>
+        </CollectionView>-->
 
         <Button
             Text="{Binding PlayPauseButTxt}"

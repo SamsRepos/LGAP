@@ -18,7 +18,7 @@ public partial class MediaPage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        _vm.Init();
+        _vm.Init(ref mediaCollectionView);
         
     }
 
@@ -27,9 +27,9 @@ public partial class MediaPage : ContentPage
         _vm.UpdateTrackPositionText();
     }
 
-    private void MediaEnded(object s, EventArgs e)
+    private void MediaEnded(object sender, EventArgs e)
     {
-        _vm.MediaEnded(mediaElemsFrame);
+        //_vm.MediaEnded(ref mediaCollectionView);
         
     }
 }

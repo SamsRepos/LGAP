@@ -25,7 +25,7 @@ public partial class MediaViewModel : ObservableObject
     [ObservableProperty] private string playlistInfoText;
     [ObservableProperty] private string playPauseButTxt;
 
-    public void Init()
+    public void Init(ref CollectionView cv)
     {
 
         if(Playlist.trackFilePaths.Count == 0)
@@ -43,7 +43,8 @@ public partial class MediaViewModel : ObservableObject
         {
             var path = Playlist.trackFilePaths[index];
 
-            MediaTracks.Add(new MediaTrack(path, index));
+            MediaTrack mt = new MediaTrack(path, index, ref cv);
+            MediaTracks.Add(mt);
             playlistInfoSb.AppendLine(path);
         }
         PlaylistInfoText = playlistInfoSb.ToString();
@@ -89,7 +90,7 @@ public partial class MediaViewModel : ObservableObject
         //}
     }
 
-    public void MediaEnded(Frame mediaElemsFrame)
+    public void MediaEnded(ref CollectionView mediaElemsCollectionView)
     {
         _currentTrackIndex++;
 
@@ -100,12 +101,51 @@ public partial class MediaViewModel : ObservableObject
         }
 
         var nextTrack = MediaTracks[_currentTrackIndex];
+        var nextMediaElem = nextTrack.MediaElem;
 
-        string nextMediaElemName = nextTrack.Name;
+        nextMediaElem.Play();
 
-        MediaElement mediaElem = (MediaElement)mediaElemsFrame.FindByName(nextMediaElemName);
+        //var nextTrack = MediaTracks[_currentTrackIndex];
+        //string nextMediaElemName = nextTrack.Name;
 
-        mediaElem.Play();
+
+        ////var collecitonItems = mediaElemsCollectionView.ItemsSource.Cast<MediaElement>();
+        ////var nextMediaElem = collecitonItems
+        ////    .FirstOrDefault(mediaElem => nameof(mediaElem) == nextMediaElemName);
+
+
+
+        ////OR
+
+        ////var collecitonItems = mediaElemsCollectionView.ItemsSource.Cast<MediaTrack>(); // Cast to MediaTrack here
+        ////var nextMediaElem = collecitonItems
+        ////    .Select(item => (MediaElement)item.GetType().GetProperty(nextMediaElemName)?.GetValue(item))
+        ////    .FirstOrDefault(mediaElem => mediaElem != null);
+
+
+        ////// OR
+
+        //var collectionItems = mediaElemsCollectionView.ItemsSource.Cast<MediaElement>();
+        ////var nextMediaElem = collectionItems.FirstOrDefault(mediaElem => nameof(mediaElem) == nextMediaElemName);
+
+        ////MediaElement nextMediaElem = null;
+
+        ////foreach (MediaElement mElem in collectionItems)
+        ////{
+        ////    string mediaElemName = nameof(mElem);
+        ////    if(mediaElemName == nextMediaElemName)
+        ////    {
+        ////        nextMediaElem = mElem;
+        ////        break;
+        ////    }
+        ////}
+
+        //var nextMediaElem = collectionItems.FirstOrDefault(
+        //    mediaElem => nameof(mediaElem) == nextMediaElemName);
+
+        //if (nextMediaElem is null) return;
+      
+        //nextMediaElem.Play();
     }
 
 }
